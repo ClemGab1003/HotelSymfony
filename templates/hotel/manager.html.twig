@@ -1,0 +1,71 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Hotel 5⭐{% endblock %}
+
+{% block body %}
+    </br>
+    </br>
+    </br>
+    <section class="chambres">
+        <h1>Nombre de chambre dans l'hotel : {{ chambres|length }}</h1>
+
+
+        {% if app.user.roles[0] == "ROLE_MANAGER" %}
+
+            <center><p><b>Page du Manager !</b></p></center>
+            {% for chambre in chambres %}
+
+                <p>Chambre n° {{ chambre.numero }}, située à l'étage n° {{ chambre.Etage }}. Elle est {{ chambre.status }} !
+
+                    <a href="{{ path('netoyage',{'id' : chambre.id}) }}">A nettoyer</a>
+
+                </p>
+
+            {% endfor %}
+
+        {% endif %}
+
+
+
+        {% if app.user.roles[0] == "ROLE_RECEPTIONNISTE" %}
+
+            <center><p><b>Page du Receptionniste!</b></p></center>
+            {% for chambre in chambres %}
+
+                {% if chambre.status == "Libre" %}
+
+                    <p>Chambre n° {{ chambre.numero }}, située à l'étage n° {{ chambre.etage }}. Elle est {{ chambre.status }} !
+
+                        <a href="{{ path('reserve',{'id' : chambre.id}) }}">A réserver</a>
+
+                    </p>
+
+                {% endif %}
+
+            {% endfor %}
+
+        {% endif %}
+
+
+
+        {% if app.user.roles[0] == "ROLE_EMPLOYEE" %}
+
+            <center><p><b>Page de l'Employee !</b></p></center>
+            {% for chambre in chambres %}
+
+                {% if chambre.status == "A nettoyer" %}
+
+                    <p>Chambre n° {{ chambre.numero }}, située à l'étage n° {{ chambre.etage }}. Elle est {{ chambre.status }} !
+
+                        <a href="{{ path('libre',{'id' : chambre.id}) }}">Libre</a>
+
+                    </p>
+
+                {% endif %}
+
+            {% endfor %}
+
+        {% endif %}
+
+    </section>
+{% endblock %}
